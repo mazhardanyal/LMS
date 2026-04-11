@@ -1,8 +1,10 @@
 import React from 'react'
 
-const Home = () => {
+function Home() {
   return (
-    <div className='text-2xl '>Home page</div>
+    <div className='text-2xl text-[red] '>
+      
+      Home page</div>
   )
 }
 
