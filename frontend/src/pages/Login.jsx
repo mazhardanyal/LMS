@@ -1,17 +1,47 @@
-import React, { useState } from 'react'
-import logo from '../assets/logo.png'
-import images from '../assets/images.jpg'
-import { MdOutlineRemoveRedEye } from "react-icons/md"; 
+import React, { useState } from 'react';
+import logo from '../assets/logo.png';
+import images from '../assets/images.jpg';
+import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { IoIosEyeOff } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { server } from '../config';
+
 function Login() {
+
   const [show, setShow] = useState(false);
-  const navigate = useNavigate()
-  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const result = await axios.post(
+        server + "/api/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
+
+      console.log(result.data);
+      toast.success("Login Successful");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Login Failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
    <div className='bg-[#dddbdb] w-screen h-screen flex items-center justify-center'>
   
-        <form className='rounded-2xl w-[90%] max-w-4xl bg-white shadow-xl flex overflow-hidden'>
+        <form className='rounded-2xl w-[90%] max-w-4xl bg-white shadow-xl flex overflow-hidden' onSubmit={(e)=>e.preventDefault}>
   
           {/* LEFT SIDE */}
           <div className='w-full md:w-1/2 p-8 flex flex-col justify-center gap-4'>
@@ -31,8 +61,7 @@ function Login() {
                 type="email"
                 placeholder='Enter your email'
                 className='border border-gray-300 rounded-lg px-4 h-10 outline-none focus:border-green-700'
-              />
-            </div>
+                onChange={(e)=>setEmail(e.target.value)} value={email}/>            </div>
   
             {/* Password */}
             <div className='flex flex-col gap-1 relative'>
@@ -42,7 +71,7 @@ function Login() {
                 type={show ? 'text' : 'password'}
                 placeholder='Enter your password'
                 className='border border-gray-300 rounded-lg px-4 pr-10 h-10 outline-none focus:border-green-700'
-              />
+             onChange={(e)=>setPassword(e.target.value)} value={password}/>
   
               {/* Eye Icon */}
               <div
@@ -56,7 +85,7 @@ function Login() {
           
   
             {/* Button */}
-            <button className='bg-green-900 text-white py-2 rounded-lg mt-3 hover:bg-green-800 transition'>
+            <button className='bg-green-900 text-white py-2 rounded-lg mt-3 hover:bg-green-800 transition' onClick={handleLogin}>
              Log In 
             </button>
   <div className='text-center text-gray-500 text-sm mt-1'>

@@ -5,7 +5,9 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { IoIosEyeOff } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
+import { server } from '../config';
 function SignUp() {
   const [show, setShow] = useState(false)
 const navigate = useNavigate()
@@ -13,19 +15,34 @@ const [name, setName] = useState('')
 const [email, setEmail] = useState('')
 const [password, setPassword] = useState('')
 const [role, setRole] = useState('student')
+const [loading, setLoading] = useState(false)
 
-const handleSignUp = async()=>{
-try{
-  const result =await axios.post('server+"/api/auth/signup" ,{
-}catch (error) {
+const handleSignUp = async () => { 
+  setLoading(true);
 
-}
+  try {
+    const result = await axios.post(
+      server + "/api/auth/signup",
+      { name, email, password, role },
+      { withCredentials: true }
+    );
 
-}
+    console.log(result.data);
+    setLoading(false);
+    navigate("/");
+    toast.success("Sign Up Successful");
+    
+    
+  } catch (error) {
+    console.log(error);
+       setLoading(false);
+    toast.error(error.response.data.message || "Sign Up Failed");
+  } 
+};
   return (
     <div className='bg-[#dddbdb] w-full min-h-screen flex items-center justify-center overflow-x-hidden p-4'>
 
-  <form onSubmit={handleSignUp} className='rounded-2xl w-full max-w-4xl bg-white shadow-xl flex flex-col md:flex-row overflow-hidden'>
+  <form  className='rounded-2xl w-full max-w-4xl bg-white shadow-xl flex flex-col md:flex-row overflow-hidden' onSubmit={(e)=>e.preventDefault()}>
         {/* LEFT SIDE */}
         <div className='w-full md:w-1/2 p-8 flex flex-col justify-center gap-4'>
 
@@ -102,8 +119,8 @@ try{
 </div>
 
           {/* Button */}
-          <button className='bg-green-900 text-white py-2 rounded-lg mt-3 hover:bg-green-800 transition'>
-            Sign Up
+          <button  className='bg-green-900 text-white py-2 rounded-lg mt-3 hover:bg-green-800 transition'  onClick={handleSignUp} disabled={loading}>
+           Sign Up
           </button>
 
           {/* OR Continue */}
