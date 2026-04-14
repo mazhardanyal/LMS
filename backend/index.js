@@ -16,7 +16,7 @@ app.use(cors({
     credentials: true
 }))
 app.use("/api/auth", authRouter)
-
+app.use("/api/user", userRouter)
 app.get('/', (req, res) => {
     res.send("Hello World my name is khan and i am not a terrorist")
 })
