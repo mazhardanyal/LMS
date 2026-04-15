@@ -8,6 +8,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { server } from '../config';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
 function SignUp() {
   const [show, setShow] = useState(false)
 const navigate = useNavigate()
@@ -16,6 +18,7 @@ const [email, setEmail] = useState('')
 const [password, setPassword] = useState('')
 const [role, setRole] = useState('student')
 const [loading, setLoading] = useState(false)
+const dispatch= useDispatch()
 
 const handleSignUp = async () => { 
   setLoading(true);
@@ -27,16 +30,21 @@ const handleSignUp = async () => {
       { withCredentials: true }
     );
 
-    console.log(result.data);
+    dispatch(setUserData(result.data))
     setLoading(false);
     navigate("/");
     toast.success("Sign Up Successful");
-    
-    
+
   } catch (error) {
     console.log(error);
-       setLoading(false);
-    toast.error(error.response.data.message || "Sign Up Failed");
+    setLoading(false);
+
+    const message =
+      error.response?.data?.message || // backend error
+      error.message ||                 // network error
+      "Sign Up Failed";
+
+    toast.error(message);
   } 
 };
   return (
@@ -141,7 +149,7 @@ const handleSignUp = async () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className='hidden md:flex w-1/2 bg-green-900 flex-col items-center justify-center text-white'>
+        <div className='hidden md:flex w-1/2 bg-orange-900 flex-col items-center justify-center text-white'>
           <img src={logo} alt="Logo" className='rounded-full w-24 shadow-2xl mb-4' />
           <span className='text-2xl font-semibold'>Learning Managment System </span>
         </div>

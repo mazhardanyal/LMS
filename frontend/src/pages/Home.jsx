@@ -1,10 +1,15 @@
 import React from 'react'
+import Nav from '../components/Nav'
 
 function Home() {
   return (
-    <div className='text-2xl text-[red] '>
+    <div className='w-[100%] overflow-hidden '>
+      <div>
+        <Nav />
+      </div>
       
-      Home page</div>
+      
+      </div>
   )
 }
 

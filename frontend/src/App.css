@@ -1,0 +1,90 @@
+/* NAV */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 25px;
+  background: #0b1220;
+  color: white;
+}
+
+/* LOGO */
+.logo img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+}
+
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* USER SECTION */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  color: white;
+}
+
+/* DASHBOARD TEXT */
+.user-section span {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* LOGOUT */
+.logout {
+  background: #ef4444;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout:hover {
+  background: #dc2626;
+}
+
+/* MENU BUTTON */
+.menu-btn {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .menu-btn {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    background: #0b1220;
+    flex-direction: column;
+    padding: 15px;
+    border-radius: 10px;
+    display: none;
+    width: 200px;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+}

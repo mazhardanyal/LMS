@@ -1,4 +1,6 @@
-export getCurrentUser = async (req, res) => {
+import User from "../model/userModel.js"
+
+export const getCurrentUser = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select("-password")
        if (!user) {
