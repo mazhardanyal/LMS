@@ -30,7 +30,7 @@ function Login() {
         { withCredentials: true }
       );
 
-     dispatch(setUserData(result.data))
+    dispatch(setUserData(result.data.user))
       toast.success("Login Successful");
       navigate("/");
     } catch (error) {

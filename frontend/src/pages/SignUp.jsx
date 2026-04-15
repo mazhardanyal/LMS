@@ -30,7 +30,8 @@ const handleSignUp = async () => {
       { withCredentials: true }
     );
 
-    dispatch(setUserData(result.data))
+   dispatch(setUserData(result.data.user))
+   console.log(result.data)
     setLoading(false);
     navigate("/");
     toast.success("Sign Up Successful");

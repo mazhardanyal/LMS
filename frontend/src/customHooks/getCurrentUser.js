@@ -5,6 +5,7 @@ import { server } from '../config'
 import { setUserData } from '../redux/userSlice'
 
 const useCurrentUser = () => {
+    console.log("HOOK RUNNING")
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -15,7 +16,7 @@ const useCurrentUser = () => {
           { withCredentials: true }
         )
 
-        dispatch(setUserData(result.data))
+        dispatch(setUserData(result.data || result.data.user))
       } catch (error) {
         console.log("Get current user error", error)
         dispatch(setUserData(null))

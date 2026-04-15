@@ -31,7 +31,7 @@ export const signUp = async (req, res) => {
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
-        return res.status(201).json(newUser)  
+        return res.status(201).json({ user: newUser })  
 
     } catch (error) {
         console.error(error)
@@ -64,7 +64,7 @@ res.cookie("token", token, {
 })
 return  res.json({
             message: "Login successful",
-            token
+            user: user
         })   
 
     } catch (error) {

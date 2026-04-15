@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { IoPerson } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 const Nav = () => {
   const [open, setOpen] = useState(false);
 
+
+  const { userData } = useSelector((state) => state.user)
+  console.log("USER DATA:", userData)
+console.log("ROLE:", userData?.role)
   return (
     <nav className="nav">
       
@@ -15,14 +20,16 @@ const Nav = () => {
 
       {/* RIGHT - MENU */}
       <div className={`nav-links ${open ? "active" : ""}`}>
-        
+        <IoPerson className="icon" />
         {/* USER SECTION */}
-        <div className="user-section">
-          <IoPerson className="icon" />
-          <span>Dashboard</span>
-        </div>
+      {userData?.role?.trim().toLowerCase() === "educator" && (
+  <div className="user-section">
+    <span>Dashboard</span>
+  </div>
+)}
 
-        <button className="logout">Logout</button>
+        {! userData ?<button className="logout">Login</button>:
+        <button className="logout">Logout</button>}
       </div>
 
       {/* MOBILE MENU */}
