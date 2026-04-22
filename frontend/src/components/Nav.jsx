@@ -8,8 +8,9 @@ const Nav = () => {
 
 
   const { userData } = useSelector((state) => state.user)
-  console.log("USER DATA:", userData)
-console.log("ROLE:", userData?.role)
+ 
+
+
   return (
     <nav className="nav">
       
@@ -20,7 +21,7 @@ console.log("ROLE:", userData?.role)
 
       {/* RIGHT - MENU */}
       <div className={`nav-links ${open ? "active" : ""}`}>
-        <IoPerson className="icon" />
+        {userData && <div className="profile-avatar">{userData.name.slice(0, 1).toUpperCase()}</div>}
         {/* USER SECTION */}
       {userData?.role?.trim().toLowerCase() === "educator" && (
   <div className="user-section">

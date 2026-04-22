@@ -48,6 +48,20 @@
   color: #38bdf8;
 }
 
+/* PROFILE AVATAR */
+.profile-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #38bdf8;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 /* DASHBOARD BUTTON (FIXED 💥) */
 .user-section span {
   font-size: 14px;
