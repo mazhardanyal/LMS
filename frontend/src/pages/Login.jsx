@@ -10,6 +10,7 @@ import { server } from '../config';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
 
+
 function Login() {
 
   const [show, setShow] = useState(false);
@@ -92,7 +93,7 @@ function Login() {
              Log In 
             </button>
   <div className='text-center text-gray-500 text-sm mt-1'>
-            <button className='text-green-900 font-semibold hover:underline' onClick={() => navigate('/forgot-password')}>
+            <button className='text-green-900 font-semibold hover:underline' onClick={() => navigate('/forget-password')}>
               Forgot Password?
             </button>
           </div>

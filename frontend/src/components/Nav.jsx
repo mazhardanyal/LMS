@@ -1,44 +1,166 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 import logo from "../assets/logo.png";
-import { IoPerson } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { setUserData } from "../redux/userSlice";
+import { server } from "../config";
+import { toast } from "react-toastify";
 
 const Nav = () => {
-  const [open, setOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
-  const { userData } = useSelector((state) => state.user)
- 
+  const ref = useRef(null);
 
+  const userData = useSelector((state) => state.user.userData);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        server + "/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+
+      dispatch(setUserData(null));
+      toast.success("Logged out");
+      navigate("/login");
+    } catch {
+      toast.error("Logout failed");
+    }
+  };
+
+  const go = (path) => {
+    navigate(path);
+    setSidebarOpen(false);
+    setProfileOpen(false);
+  };
+
+  useEffect(() => {
+    const close = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
 
   return (
-    <nav className="nav">
-      
-      {/* LEFT - LOGO */}
-      <div className="logo">
-        <img src={logo} alt="logo" />
+    <>
+      {/* NAV */}
+      <nav className="nav-glass">
+
+        <div className="logo" onClick={() => go("/")}>
+          <img src={logo} alt="logo" />
+        </div>
+
+        {/* RIGHT */}
+        <div className="right-zone">
+
+          {/* DESKTOP */}
+          <div className="desktop-actions">
+
+            {userData ? (
+              <>
+                {userData.role?.toLowerCase() === "educator" && (
+                  <div
+                    className={`pill ${
+                      location.pathname === "/dashboard" ? "active" : ""
+                    }`}
+                    onClick={() => go("/dashboard")}
+                  >
+                    Dashboard
+                  </div>
+                )}
+
+                <div className="pill danger" onClick={handleLogout}>
+                  Logout
+                </div>
+
+                <div
+                  className="avatar"
+                  onClick={() => setProfileOpen(!profileOpen)}
+                >
+                  {userData.name.charAt(0).toUpperCase()}
+                </div>
+              </>
+            ) : (
+              <button className="btn-login" onClick={() => go("/login")}>
+                Login
+              </button>
+            )}
+
+          </div>
+
+          {/* HAMBURGER */}
+          <div className="hamburger" onClick={() => setSidebarOpen(true)}>
+            ☰
+          </div>
+
+        </div>
+
+        {/* PROFILE CARD */}
+        <div
+          ref={ref}
+          className={`dropdown ${profileOpen ? "show" : ""}`}
+        >
+          <div onClick={() => go("/profile")} onClick={()=>navigate("/profile")}> My Profile</div>
+          <div onClick={() => go("/my-courses")}> My Courses</div>
+        </div>
+
+      </nav>
+
+      {/* BACKDROP */}
+      {sidebarOpen && (
+        <div
+          className="backdrop"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* SIDEBAR */}
+      <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+
+        <div className="side-item" onClick={() => go("/")}>
+          Home
+        </div>
+
+        {userData && (
+          <>
+            <div className="side-item" onClick={() => go("/profile")}>
+              Profile
+            </div>
+
+            <div className="side-item" onClick={() => go("/my-courses")}>
+              My Courses
+            </div>
+
+            {userData.role?.toLowerCase() === "educator" && (
+              <div className="side-item" onClick={() => go("/dashboard")}>
+                Dashboard
+              </div>
+            )}
+
+            <div className="side-item danger" onClick={handleLogout}>
+              Logout
+            </div>
+          </>
+        )}
+
+        {!userData && (
+          <div className="side-item" onClick={() => go("/login")}>
+            Login
+          </div>
+        )}
+
       </div>
-
-      {/* RIGHT - MENU */}
-      <div className={`nav-links ${open ? "active" : ""}`}>
-        {userData && <div className="profile-avatar">{userData.name.slice(0, 1).toUpperCase()}</div>}
-        {/* USER SECTION */}
-      {userData?.role?.trim().toLowerCase() === "educator" && (
-  <div className="user-section">
-    <span>Dashboard</span>
-  </div>
-)}
-
-        {! userData ?<button className="logout">Login</button>:
-        <button className="logout">Logout</button>}
-      </div>
-
-      {/* MOBILE MENU */}
-      <div className="menu-btn" onClick={() => setOpen(!open)}>
-        ☰
-      </div>
-
-    </nav>
+    </>
   );
 };
 

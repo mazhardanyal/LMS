@@ -3,7 +3,7 @@ import Nav from '../components/Nav'
 
 function Home() {
   return (
-    <div className='w-[100%] overflow-hidden '>
+    <div className='w-[100%]  '>
       <div>
         <Nav />
       </div>

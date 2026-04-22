@@ -85,4 +85,19 @@ export const logOut = async (req, res) => {
         console.error(error)
         res.status(500).json({ message: `Logout Error: ${error}` })
     }
+}
+
+export const forgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        // TODO: Generate reset token and send email
+        res.json({ message: "Reset link sent to your email" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
+    }
 }  
